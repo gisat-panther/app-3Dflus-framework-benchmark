@@ -15,11 +15,11 @@ const INITIAL_VIEW_STATE = {
 const MAPBOX_ACCESS_TOKEN =
   "pk.eyJ1IjoibWFyaWRhbmkiLCJhIjoiSGF2TGdwZyJ9.B0N8ybRGG38wmRK_VfxPoA";
 
-// const URL = "./data/emsn091_32_01_ps_los.json"
-// const URL = "./data/emsn091_compo_vert.json"
 const URLS = [
   "https://ptr.gisat.cz/ftpstorage/applications/emsn091Manila/interferometry/los/142_decimated.json",
   "https://ptr.gisat.cz/ftpstorage/applications/emsn091Manila/interferometry/los/32.json",
+  // "https://ptr.gisat.cz/ftpstorage/applications/emsn091Manila/interferometry/vertg/142.json",
+  // "https://ptr.gisat.cz/ftpstorage/applications/emsn091Manila/interferometry/vertg/32.json",
 ];
 
 let colorScale = chroma
@@ -29,7 +29,6 @@ let colorScale = chroma
 export default class App extends Component {
   state = {
     jsonData: [],
-    // mapStyle: "mapbox://styles/mapbox/dark-v10",
   };
 
   componentDidMount() {
