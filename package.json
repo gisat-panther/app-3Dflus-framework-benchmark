@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@deck.gl/aggregation-layers": "^8.5.5",
     "@deck.gl/core": "^8.5.2",
     "@deck.gl/layers": "^8.5.2",
     "@deck.gl/react": "^8.5.2",
@@ -10,6 +11,7 @@
     "@loaders.gl/gis": "^3.0.8",
     "@loaders.gl/json": "^3.0.8",
     "@loaders.gl/mvt": "^3.0.8",
+    "@loaders.gl/shapefile": "^3.0.9",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
