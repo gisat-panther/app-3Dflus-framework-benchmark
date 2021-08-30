@@ -10,6 +10,8 @@ import chroma from "chroma-js";
 import { load } from "@loaders.gl/core";
 import { COORDINATE_SYSTEM } from "@deck.gl/core";
 import { fromUrl } from "geotiff";
+import { SimpleMeshLayer } from "@deck.gl/mesh-layers";
+import { CubeGeometry } from "@luma.gl/core";
 
 const INITIAL_VIEW_STATE = {
   longitude: 120.81321,
@@ -20,10 +22,11 @@ const INITIAL_VIEW_STATE = {
 const COLUMNS = false;
 const HEATMAP = false;
 const HEXAGONS = false;
-const POINTS = true;
+const POINTS = false;
 const TERRAIN = true;
 const BUILDINGS = false;
 const POINTCLOUD = false;
+const ARROW = true;
 
 const MAPBOX_ACCESS_TOKEN =
   "pk.eyJ1IjoibWFyaWRhbmkiLCJhIjoiSGF2TGdwZyJ9.B0N8ybRGG38wmRK_VfxPoA";
@@ -31,7 +34,8 @@ const MAPBOX_ACCESS_TOKEN =
 const SHP_URL = "./data/manila_buildings_clip_larger_than_250.shp";
 
 const POINT_URLS = [
-  "https://ptr.gisat.cz/ftpstorage/applications/emsn091Manila/interferometry/los/142_decimated.json",
+  "./data/od_Michala/32.json",
+  // "https://ptr.gisat.cz/ftpstorage/applications/emsn091Manila/interferometry/los/142_decimated.json",
   // "https://ptr.gisat.cz/ftpstorage/applications/emsn091Manila/interferometry/los/32.json",
   // "https://ptr.gisat.cz/ftpstorage/applications/emsn091Manila/interferometry/los/142.json",
   // "https://ptr.gisat.cz/ftpstorage/applications/emsn091Manila/interferometry/vertg/142.json",
@@ -57,7 +61,7 @@ export default class App extends Component {
   };
 
   componentDidMount() {
-    if (POINTS || POINTCLOUD || COLUMNS || HEXAGONS || HEATMAP) {
+    if (POINTS || POINTCLOUD || COLUMNS || HEXAGONS || HEATMAP || ARROW) {
       this._loadData().then((data) => {
         this.setState({ jsonData: data });
       });
@@ -224,6 +228,24 @@ export default class App extends Component {
               Math.random() * 1000,
             ],
             getColor: (d) => colorScale(d.properties.vel_avg).rgb(),
+          })
+        );
+      }
+
+      if (ARROW) {
+        layers.push(
+          new SimpleMeshLayer({
+            id: "mesh-layer",
+            data: this.state.jsonData,
+            // texture: "texture.png",
+            mesh: new CubeGeometry(),
+            getPosition: (d) => d.geometry.coordinates,
+            getColor: (d) => colorScale(d.properties.vel_avg).rgb(),
+            getOrientation: (d) => [
+              d.properties.az_ang,
+              d.properties.inc_ang,
+              0,
+            ],
           })
         );
       }
