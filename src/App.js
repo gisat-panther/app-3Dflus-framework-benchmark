@@ -11,7 +11,8 @@ import { load } from "@loaders.gl/core";
 import { COORDINATE_SYSTEM } from "@deck.gl/core";
 import { fromUrl } from "geotiff";
 import { SimpleMeshLayer } from "@deck.gl/mesh-layers";
-import { CubeGeometry } from "@luma.gl/core";
+import { OBJLoader } from "@loaders.gl/obj";
+import { scaleLinear } from "d3-scale";
 
 const INITIAL_VIEW_STATE = {
   longitude: 120.81321,
@@ -47,6 +48,8 @@ const TERRAIN_URL = "./data/Copernicus_DSM_10_merged.tif";
 let colorScale = chroma
   .scale(["#fda34b", "#ff7882", "#c8699e", "#7046aa", "#0c1db8", "#2eaaac"])
   .domain([-30, 10]);
+
+let sizeScale = scaleLinear().domain([-30, 10]).range([4, 1]);
 
 let heightColorScale = chroma
   .scale(["#A0FAB4", "#88CA97", "#6E9B78", "#536E59"])
@@ -237,15 +240,18 @@ export default class App extends Component {
           new SimpleMeshLayer({
             id: "mesh-layer",
             data: this.state.jsonData,
-            // texture: "texture.png",
-            mesh: new CubeGeometry(),
+            mesh: "./obj/arrow.obj",
+            loaders: [OBJLoader],
+            getScale: (d) => [1, sizeScale(d.properties.vel_avg), 1],
+            sizeScale: 100,
             getPosition: (d) => d.geometry.coordinates,
             getColor: (d) => colorScale(d.properties.vel_avg).rgb(),
             getOrientation: (d) => [
+              0,
               d.properties.az_ang,
               d.properties.inc_ang,
-              0,
             ],
+            getTranslation: (d) => [0, 0, d.properties.h_cop30m * 100],
           })
         );
       }
