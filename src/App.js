@@ -27,7 +27,7 @@ const POINTS = false;
 const TERRAIN = true;
 const BUILDINGS = false;
 const POINTCLOUD = false;
-const ARROW = true;
+const ARROW = false;
 
 const MAPBOX_ACCESS_TOKEN =
   "pk.eyJ1IjoibWFyaWRhbmkiLCJhIjoiSGF2TGdwZyJ9.B0N8ybRGG38wmRK_VfxPoA";
@@ -225,10 +225,10 @@ export default class App extends Component {
             data: this.state.jsonData,
             pickable: false,
             coordinateSystem: COORDINATE_SYSTEM.LNGLAT,
-            pointSize: 3,
+            pointSize: 2,
             getPosition: (d) => [
               ...d.geometry.coordinates,
-              Math.random() * 1000,
+              10 + d.properties.h_cop30m * 75,
             ],
             getColor: (d) => colorScale(d.properties.vel_avg).rgb(),
           })
