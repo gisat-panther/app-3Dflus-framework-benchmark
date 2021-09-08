@@ -271,7 +271,7 @@ export default class App extends Component {
             elevationValue: (d) => Math.random() * 100,
             getFillColor: (d) => [
               ...colorScale(d.properties.vel_avg).rgb(),
-              180,
+              255,
             ],
             getPointRadius: 20,
           })
