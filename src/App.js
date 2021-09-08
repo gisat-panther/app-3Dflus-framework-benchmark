@@ -13,6 +13,7 @@ import {fromUrl} from "geotiff";
 import {SimpleMeshLayer} from "@deck.gl/mesh-layers";
 import {OBJLoader} from "@loaders.gl/obj";
 import {scaleLinear} from "d3-scale";
+import arrayShuffle from "array-shuffle";
 
 const INITIAL_VIEW_STATE = {
     longitude: 120.81321,
@@ -28,6 +29,15 @@ const TERRAIN = false;
 const BUILDINGS = false;
 const POINTCLOUD = false;
 const ARROW = true;
+const ANIMATED_POINTS = true;
+
+//animation constants
+const FRAME_MIN_TIME = 100;
+const ANIMATED_POINTS_COUNT = 1000;
+let lastFrameTime = 0;
+let frameCount = 0;
+let currentFrame = 0;
+let timelineDates = [];
 
 let buildingsCount = 0;
 let pointsCount = 0;
@@ -62,15 +72,24 @@ let heightColorScale = chroma
 export default class App extends Component {
     state = {
         jsonData: [],
+        
+    animatedData: [],
         shpData: [],
         terrainData: [],
         terrainBoundingBox: [],
     };
 
     componentDidMount() {
-        if (POINTS || POINTCLOUD || COLUMNS || HEXAGONS || HEATMAP || ARROW) {
+        if (POINTS || POINTCLOUD || COLUMNS || HEXAGONS || HEATMAP || ARROW || ANIMATED_POINTS) {
             this._loadData().then((data) => {
                 this.setState({jsonData: data});
+                if (ANIMATED_POINTS) {
+		          this._loadAnimatedData(data).then((animatedData) => {
+	            this.setState({ animatedData });
+	            this._createTimeArrays();
+	            window.requestAnimationFrame(this._animate);
+	          });
+	        }
             });
         }
 
@@ -91,6 +110,66 @@ export default class App extends Component {
     componentWillUnmount() {
     }
 
+  componentWillUnmount() {}
+  _loadAnimatedData = (entireDataset) => {
+    let idList = entireDataset.map((item) => item.id);
+    let idListShorten = arrayShuffle(idList).slice(0, ANIMATED_POINTS_COUNT);
+
+    let promisedData = [];
+    idListShorten.forEach((id) => {
+      const url = `https://ptr.gisat.cz/ftpstorage/applications/emsn091Manila/interferometry/los/32/${id}.json`;
+      promisedData.push(
+        new Promise((resolve) => resolve(load(url, JSONLoader)))
+      );
+    });
+    return Promise.all(promisedData).then((values) => values);
+  };
+
+  _createTimeArrays = () => {
+    let animatedData = this.state.animatedData;
+    animatedData.forEach((item, index) => {
+      let timelineValues = [];
+      Object.entries(item.properties).forEach(([key, value]) => {
+        if (key.startsWith("d_")) {
+          timelineValues.push(value == null ? 0 : value);
+          if (index === 0) timelineDates.push(key);
+        }
+      });
+      if (index === 0) frameCount = timelineValues.length;
+      animatedData[index].d_timeline = timelineValues;
+      animatedData[index].modified_height = item.properties.h_cop30m + 10000;
+      animatedData[index].coordinate_update = timelineValues[0];
+    });
+
+    this.setState({ animatedData });
+  };
+
+  _animate = (time) => {
+    if (time - lastFrameTime < FRAME_MIN_TIME) {
+      window.requestAnimationFrame(this._animate);
+      return;
+    }
+
+    lastFrameTime = time;
+
+    if (currentFrame < frameCount) currentFrame++;
+    else currentFrame = 0;
+
+    let animatedData = [...this.state.animatedData];
+    animatedData.forEach((item, index) => {
+      animatedData[index].coordinate_update = item.d_timeline[currentFrame];
+      if (currentFrame === 0) {
+        animatedData[index].modified_height = item.properties.h_cop30m + 10000;
+      }
+      animatedData[index].modified_height =
+        item.modified_height + item.d_timeline[currentFrame] / 10;
+      animatedData[index].properties.color = chroma.random().rgb();
+    });
+
+    this.setState({ animatedData });
+    window.requestAnimationFrame(this._animate);
+  };
+
     _loadTIFData = async () => {
         try {
             let tiffData = await fromUrl(TERRAIN_URL);
@@ -103,7 +182,7 @@ export default class App extends Component {
             return [];
         }
     };
-
+    
     _loadShpData = async () => {
         let promisedData = await load(SHP_URL, ShapefileLoader);
         buildingsCount = promisedData.data.length
@@ -145,7 +224,37 @@ export default class App extends Component {
             );
         }
 
-        if (this.state.shpData.length > 0) {
+    if (this.state.animatedData.length > 0 && ANIMATED_POINTS) {
+      layers.push(
+        new PointCloudLayer({
+          id: "animated-layer",
+          data: this.state.animatedData,
+          pickable: false,
+          coordinateSystem: COORDINATE_SYSTEM.LNGLAT,
+          pointSize: 6,
+          getPosition: (d) => [...d.geometry.coordinates, d.modified_height],
+          getColor: (d) => colorScale(d.properties.vel_avg).rgb(),
+        })
+      );
+
+      // layers.push(
+      //   new ColumnLayer({
+      //     id: "animated-column-layer",
+      //     data: this.state.animatedData,
+      //     diskResolution: 12,
+      //     radius: 250,
+      //     extruded: true,
+      //     pickable: true,
+      //     elevationScale: 500,
+      //     getPosition: (d) => d.geometry.coordinates,
+      //     getFillColor: (d) => colorScale(d.properties.vel_avg).rgb(),
+      //     getLineColor: [0, 0, 0],
+      //     getElevation: (d) => d.modified_height / 500,
+      //   })
+      // );
+    }
+    
+      if (this.state.shpData.length > 0) {
             if (BUILDINGS) {
                 layers.push(
                     new GeoJsonLayer({
@@ -164,6 +273,24 @@ export default class App extends Component {
                 );
             }
         }
+
+    if (this.state.terrainData.length > 0 && TERRAIN) {
+      layers.push(
+        new TerrainLayer({
+          elevationDecoder: {
+            rScaler: 2,
+            gScaler: 0,
+            bScaler: 0,
+            offset: 0,
+          },
+          // Digital elevation model from https://www.usgs.gov/
+          elevationData: this.state.terrainData,
+          texture:
+            "https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/terrain-mask.png",
+          bounds: this.state.terrainBoundingBox,
+        })
+      );
+    }
 
         if (this.state.jsonData.length > 0) {
             if (HEATMAP) {
@@ -305,4 +432,24 @@ export default class App extends Component {
             </div>
         );
     }
+
+    return (
+      <div>
+        <DeckGL
+          initialViewState={INITIAL_VIEW_STATE}
+          controller={true}
+          layers={layers}
+          // getTooltip={({ object }) =>
+          //   object && `Vel avg: ${object.properties.vel_avg}`
+          // }
+        >
+          <StaticMap
+            mapboxApiAccessToken={MAPBOX_ACCESS_TOKEN}
+            mapStyle={this.state.mapStyle}
+          />
+          Measurement time: {timelineDates[currentFrame]}
+        </DeckGL>
+      </div>
+    );
+  }
 }
