@@ -52,8 +52,8 @@ const SHP_URL = "./data/manila_buildings_larger_than_250.shp";
 const POINT_URLS = [
     // "./data/od_Michala/142.json",
     // "./data/od_Michala/32.json",
-    // "./data/interferometry/los/32.json",
-    "http://localhost:4445/ftpstorage/applications/emsn091Manila/interferometry/los/142.json",
+    "./data/interferometry/los/32.json",
+    // "http://localhost:4445/ftpstorage/applications/emsn091Manila/interferometry/los/142.json",
     // "http://localhost:4445/ftpstorage/applications/emsn091Manila/interferometry/vertg/142.json",
     // "http://localhost:4445/ftpstorage/applications/emsn091Manila/interferometry/vertg/32.json",
     // "http://localhost:4445/ftpstorage/applications/emsn091Manila/interferometry/los/142_decimated.json",
