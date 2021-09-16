@@ -1,47 +1,13 @@
 {
-  "name": "01-urban-subsidence",
-  "version": "0.1.0",
+  "name": "3DFlus-framework-benchmark",
+  "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "@deck.gl/aggregation-layers": "^8.5.5",
-    "@deck.gl/core": "^8.5.2",
-    "@deck.gl/geo-layers": "^8.5.5",
-    "@deck.gl/layers": "^8.5.2",
-    "@deck.gl/mesh-layers": "^8.5.6",
-    "@deck.gl/react": "^8.5.2",
-    "@loaders.gl/core": "^2.3.13",
-    "@loaders.gl/gis": "^3.0.8",
-    "@loaders.gl/json": "^3.0.8",
-    "@loaders.gl/mvt": "^3.0.8",
-    "@loaders.gl/obj": "3.0.11",
-    "@loaders.gl/shapefile": "^3.0.9",
-    "@luma.gl/core": "8.5.5",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "array-shuffle": "^3.0.0",
-    "chroma-js": "^2.1.2",
-    "d3-scale": "^4.0.0",
-    "deck.gl": "^8.5.2",
-    "geotiff": "^1.0.4",
-    "prettier": "^2.3.2",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-map-gl": "^6.1.16",
-    "react-scripts": "4.0.3",
-    "web-vitals": "^1.0.1"
+    "gh-pages": "^3.2.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "build": "(cd src/deckgl/1000points && npm run build); (cd src/deckgl/XXXXpoints && npm run build);",
+    "deploy": "gh-pages -b gh-pages -d dist"
   },
   "browserslist": {
     "production": [

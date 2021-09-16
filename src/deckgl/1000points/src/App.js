@@ -51,12 +51,16 @@ const SHP_URL = "./data/manila_buildings_larger_than_250.shp";
 
 const POINT_URLS = [
     // "./data/od_Michala/142.json",
-    "./data/od_Michala/32.json",
-    // "https://ptr.gisat.cz/ftpstorage/applications/emsn091Manila/interferometry/los/142_decimated.json",
-    // "https://ptr.gisat.cz/ftpstorage/applications/emsn091Manila/interferometry/los/32.json",
-    // "https://ptr.gisat.cz/ftpstorage/applications/emsn091Manila/interferometry/los/142.json",
-    // "https://ptr.gisat.cz/ftpstorage/applications/emsn091Manila/interferometry/vertg/142.json",
-    // "https://ptr.gisat.cz/ftpstorage/applications/emsn091Manila/interferometry/vertg/32.json",
+    // "./data/od_Michala/32.json",
+    // "./data/interferometry/los/32.json",
+    "http://localhost:4445/ftpstorage/applications/emsn091Manila/interferometry/los/142.json",
+    // "http://localhost:4445/ftpstorage/applications/emsn091Manila/interferometry/vertg/142.json",
+    // "http://localhost:4445/ftpstorage/applications/emsn091Manila/interferometry/vertg/32.json",
+    // "http://localhost:4445/ftpstorage/applications/emsn091Manila/interferometry/los/142_decimated.json",
+    // "http://localhost:4445/ftpstorage/applications/emsn091Manila/interferometry/los/32.json",
+    // "http://localhost:4445/ftpstorage/applications/emsn091Manila/interferometry/los/142.json",
+    // "http://localhost:4445/ftpstorage/applications/emsn091Manila/interferometry/vertg/142.json",
+    // "http://localhost:4445/ftpstorage/applications/emsn091Manila/interferometry/vertg/32.json",
 ];
 
 const TERRAIN_URL = "./data/Copernicus_DSM_10_merged.tif";
@@ -134,6 +138,7 @@ export default class App extends Component {
 
         let promisedData = [];
         idListShorten.forEach((id) => {
+            // const url = `./data/interferometry/los/32/${id}.json`24
             const url = `https://ptr.gisat.cz/ftpstorage/applications/emsn091Manila/interferometry/los/32/${id}.json`;
             promisedData.push(
                 new Promise((resolve) => resolve(load(url, JSONLoader)))
