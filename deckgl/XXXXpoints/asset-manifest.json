@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.js": "/static/js/main.5fb2147d.chunk.js",
-    "main.js.map": "/static/js/main.5fb2147d.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.36297c1f.js",
-    "runtime-main.js.map": "/static/js/runtime-main.36297c1f.js.map",
-    "static/js/2.641ecd65.chunk.js": "/static/js/2.641ecd65.chunk.js",
-    "static/js/2.641ecd65.chunk.js.map": "/static/js/2.641ecd65.chunk.js.map",
-    "index.html": "/index.html",
-    "static/js/2.641ecd65.chunk.js.LICENSE.txt": "/static/js/2.641ecd65.chunk.js.LICENSE.txt"
+    "main.js": "./deckgl/XXXXpoints/static/js/main.5fb2147d.chunk.js",
+    "main.js.map": "./deckgl/XXXXpoints/static/js/main.5fb2147d.chunk.js.map",
+    "runtime-main.js": "./deckgl/XXXXpoints/static/js/runtime-main.65bb34fd.js",
+    "runtime-main.js.map": "./deckgl/XXXXpoints/static/js/runtime-main.65bb34fd.js.map",
+    "static/js/2.9613e2d5.chunk.js": "./deckgl/XXXXpoints/static/js/2.9613e2d5.chunk.js",
+    "static/js/2.9613e2d5.chunk.js.map": "./deckgl/XXXXpoints/static/js/2.9613e2d5.chunk.js.map",
+    "index.html": "./deckgl/XXXXpoints/index.html",
+    "static/js/2.9613e2d5.chunk.js.LICENSE.txt": "./deckgl/XXXXpoints/static/js/2.9613e2d5.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.36297c1f.js",
-    "static/js/2.641ecd65.chunk.js",
+    "static/js/runtime-main.65bb34fd.js",
+    "static/js/2.9613e2d5.chunk.js",
     "static/js/main.5fb2147d.chunk.js"
   ]
 }

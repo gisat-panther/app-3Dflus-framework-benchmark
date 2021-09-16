@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.js": "/static/js/main.d3ca1fa9.chunk.js",
-    "main.js.map": "/static/js/main.d3ca1fa9.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.36297c1f.js",
-    "runtime-main.js.map": "/static/js/runtime-main.36297c1f.js.map",
-    "static/js/2.8b5080ad.chunk.js": "/static/js/2.8b5080ad.chunk.js",
-    "static/js/2.8b5080ad.chunk.js.map": "/static/js/2.8b5080ad.chunk.js.map",
-    "index.html": "/index.html",
-    "static/js/2.8b5080ad.chunk.js.LICENSE.txt": "/static/js/2.8b5080ad.chunk.js.LICENSE.txt"
+    "main.js": "./deckgl/1000points/static/js/main.d3ca1fa9.chunk.js",
+    "main.js.map": "./deckgl/1000points/static/js/main.d3ca1fa9.chunk.js.map",
+    "runtime-main.js": "./deckgl/1000points/static/js/runtime-main.79cdcfdd.js",
+    "runtime-main.js.map": "./deckgl/1000points/static/js/runtime-main.79cdcfdd.js.map",
+    "static/js/2.71968215.chunk.js": "./deckgl/1000points/static/js/2.71968215.chunk.js",
+    "static/js/2.71968215.chunk.js.map": "./deckgl/1000points/static/js/2.71968215.chunk.js.map",
+    "index.html": "./deckgl/1000points/index.html",
+    "static/js/2.71968215.chunk.js.LICENSE.txt": "./deckgl/1000points/static/js/2.71968215.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.36297c1f.js",
-    "static/js/2.8b5080ad.chunk.js",
+    "static/js/runtime-main.79cdcfdd.js",
+    "static/js/2.71968215.chunk.js",
     "static/js/main.d3ca1fa9.chunk.js"
   ]
 }
