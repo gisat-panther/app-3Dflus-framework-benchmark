@@ -4,6 +4,7 @@
   "homepage": "./",
   "private": true,
   "dependencies": {
+    "dat.gui": "^0.7.7",
     "@deck.gl/aggregation-layers": "^8.5.5",
     "@deck.gl/core": "^8.5.2",
     "@deck.gl/geo-layers": "^8.5.5",
