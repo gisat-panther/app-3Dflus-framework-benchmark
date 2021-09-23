@@ -12,7 +12,7 @@ import * as dat from 'dat.gui'
 // ---- GUI definition - start
 const gui = new dat.GUI();
 const settings = {
-    numOfPoints: "400 000",
+    numOfPoints: "900 000",
     showBuildings: false
 }
 let guiNumOfPoints = gui.add(settings, 'numOfPoints', ['40 000', '400 000', '900 000', '1 700 000']).name('Number of points').listen();
@@ -31,15 +31,11 @@ const MAPBOX_ACCESS_TOKEN =
     "pk.eyJ1IjoibWFyaWRhbmkiLCJhIjoiSGF2TGdwZyJ9.B0N8ybRGG38wmRK_VfxPoA";
 
 const DATA_URLS = {
-    // "los32": "./data/interferometry/los/32.json",
-    "los32": "https://ptr.gisat.cz/ftpstorage/applications/emsn091Manila/interferometry/los/32.json",
-    // "los142": "../../../data/interferometry/los/142.json",
-    "los142": "https://ptr.gisat.cz/ftpstorage/applications/emsn091Manila/interferometry/los/142.json",
+    "los32": "https://ptr.gisat.cz/ftpstorage/applications/3dflus/test_data/interferometry/los/32.json",
+    "los142": "https://ptr.gisat.cz/ftpstorage/applications/3dflus/test_data/interferometry/los/142.json",
     "los142Decimated": "../../../data/interferometry/los/142_decimated.json",
-    "vertg32": "https://ptr.gisat.cz/ftpstorage/applications/emsn091Manila/interferometry/vertg/32.json",
-    // "vertg32": "./data/interferometry/vertg/32.json",
-    "vertg142": "https://ptr.gisat.cz/ftpstorage/applications/emsn091Manila/interferometry/vertg/142.json",
-    // "vertg142": "./data/interferometry/vertg/142.json",
+    "vertg32": "https://ptr.gisat.cz/ftpstorage/applications/3dflus/test_data/interferometry/vertg/32.json",
+    "vertg142": "https://ptr.gisat.cz/ftpstorage/applications/3dflus/test_data/interferometry/vertg/142.json",
     "buildings": "./data/buildings/manila_buildings_larger_than_250.shp"
 }
 
@@ -52,10 +48,10 @@ const getPointUrls = (number) => {
             point_urls = [DATA_URLS.los142]
             break;
         case "900 000":
-            point_urls = [DATA_URLS.los32, DATA_URLS.los142, DATA_URLS.los142Decimated]
+            point_urls = [DATA_URLS.los32, DATA_URLS.los142]
             break;
         case "1 700 000":
-            point_urls = [DATA_URLS.los32, DATA_URLS.los142, DATA_URLS.vertg32, DATA_URLS.vertg142, DATA_URLS.los142Decimated]
+            point_urls = [DATA_URLS.los32, DATA_URLS.los142, DATA_URLS.vertg32, DATA_URLS.vertg142]
             break;
         default:
             point_urls = [DATA_URLS.los142]
