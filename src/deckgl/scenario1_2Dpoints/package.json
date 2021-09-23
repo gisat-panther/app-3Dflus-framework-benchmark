@@ -37,7 +37,7 @@
   "scripts": {
     "start": "react-scripts start",
     "proxy": "lcp --proxyUrl https://ptr.gisat.cz --port 4445 --origin http://localhost:3000 --proxyPartial \"\" --credentials",
-    "build": "BUILD_PATH='../../../dist/deckgl/XXXXpoints' react-scripts build",
+    "build": "cross-env BUILD_PATH='../../../dist/deckgl/scenario1_2Dpoints' react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -58,5 +58,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   }
 }
