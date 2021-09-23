@@ -36,7 +36,7 @@ const DATA_URLS = {
     "los142Decimated": "../../../data/interferometry/los/142_decimated.json",
     "vertg32": "https://ptr.gisat.cz/ftpstorage/applications/3dflus/test_data/interferometry/vertg/32.json",
     "vertg142": "https://ptr.gisat.cz/ftpstorage/applications/3dflus/test_data/interferometry/vertg/142.json",
-    "buildings": "./data/buildings/manila_buildings_larger_than_250.shp"
+    "buildings": "https://ptr.gisat.cz/ftpstorage/applications/3dflus/test_data/buildings/manila_buildings_larger_than_250.shp"
 }
 
 const getPointUrls = (number) => {
