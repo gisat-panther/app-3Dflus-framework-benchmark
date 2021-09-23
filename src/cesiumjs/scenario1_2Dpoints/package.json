@@ -24,12 +24,13 @@
     "url-loader": "^2.2.0",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.9",
-    "webpack-dev-server": "^3.9.0"
+    "webpack-dev-server": "^3.9.0",
+    "cross-env": "^7.0.3"
   },
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -b gh-pages -d dist",
-    "build": "node_modules/.bin/webpack --config webpack.config.js",
+    "build": "cross-env BUILD_PATH='../../../dist/cesiumjs/scenario1_2Dpoints' node_modules/.bin/webpack --config webpack.config.js",
     "start": "node_modules/.bin/webpack-dev-server --config webpack.config.js",
     "release": "node_modules/.bin/webpack --config webpack.release.config.js",
     "serve-release": "node_modules/.bin/webpack-dev-server --config webpack.release.config.js --content-base /dist"
