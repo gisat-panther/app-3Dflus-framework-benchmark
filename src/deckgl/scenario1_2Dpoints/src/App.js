@@ -31,11 +31,15 @@ const MAPBOX_ACCESS_TOKEN =
     "pk.eyJ1IjoibWFyaWRhbmkiLCJhIjoiSGF2TGdwZyJ9.B0N8ybRGG38wmRK_VfxPoA";
 
 const DATA_URLS = {
-    "los32": "./data/interferometry/los/32.json",
-    "los142": "./data/interferometry/los/142.json",
-    "los142Decimated": "./data/interferometry/los/142_decimated.json",
-    "vertg32": "./data/interferometry/vertg/32.json",
-    "vertg142": "./data/interferometry/vertg/142.json",
+    // "los32": "./data/interferometry/los/32.json",
+    "los32": "https://ptr.gisat.cz/ftpstorage/applications/emsn091Manila/interferometry/los/32.json",
+    // "los142": "../../../data/interferometry/los/142.json",
+    "los142": "https://ptr.gisat.cz/ftpstorage/applications/emsn091Manila/interferometry/los/142.json",
+    "los142Decimated": "../../../data/interferometry/los/142_decimated.json",
+    "vertg32": "https://ptr.gisat.cz/ftpstorage/applications/emsn091Manila/interferometry/vertg/32.json",
+    // "vertg32": "./data/interferometry/vertg/32.json",
+    "vertg142": "https://ptr.gisat.cz/ftpstorage/applications/emsn091Manila/interferometry/vertg/142.json",
+    // "vertg142": "./data/interferometry/vertg/142.json",
     "buildings": "./data/buildings/manila_buildings_larger_than_250.shp"
 }
 
