@@ -1,0 +1,5 @@
+﻿node_modules
+.idea
+package-lock.json
+dist/data
+dist
