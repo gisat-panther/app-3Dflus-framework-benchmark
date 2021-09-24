@@ -28,25 +28,24 @@ Ion.defaultAccessToken =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4NGNhMzk5NC1kYjk5LTQ5ZDEtOTM5Yy0zYmUyYWEwMjY5MmQiLCJpZCI6NTgyNjksImlhdCI6MTYyMzA1NTMyMX0.7jidfR2a2M5t8KsvDho5TJcBLBZl04UBj3jdeAB1otY";
 
 const DATA_URLS = {
-    "los32": "./data/od_Michala/32.json",
-    "los142": "./data/od_Michala/142.json",
+    "los32": "https://ptr.gisat.cz/ftpstorage/applications/3dflus/test_data/interferometry/los/32.json",
+    "los142": "https://ptr.gisat.cz/ftpstorage/applications/3dflus/test_data/interferometry/los/142.json",
+    "vertg32": "https://ptr.gisat.cz/ftpstorage/applications/3dflus/test_data/interferometry/vertg/32.json",
+    "vertg142": "https://ptr.gisat.cz/ftpstorage/applications/3dflus/test_data/interferometry/vertg/142.json",
     "terrain": 585933
 };
 
 const getPointUrls = (number) => {
     switch (number) {
-        // case "40 000":
-        //     point_urls = [DATA_URLS.los142Decimated]
-        //     break;
         case "400 000":
             point_urls = [DATA_URLS.los142]
             break;
         case "900 000":
             point_urls = [DATA_URLS.los32, DATA_URLS.los142]
             break;
-        // case "1 700 000":
-        //     point_urls = [DATA_URLS.los32, DATA_URLS.los142, DATA_URLS.vertg32, DATA_URLS.vertg142]
-        //     break;
+        case "1 700 000":
+            point_urls = [DATA_URLS.los32, DATA_URLS.los142, DATA_URLS.vertg32, DATA_URLS.vertg142]
+            break;
         default:
             point_urls = [DATA_URLS.los142]
     }

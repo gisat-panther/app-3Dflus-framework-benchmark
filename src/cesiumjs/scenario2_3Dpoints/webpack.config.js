@@ -12,7 +12,7 @@ module.exports = [{
     },
     output: {
         filename: '[name].js',
-        path: path.resolve(__dirname, 'dist')
+        path: path.resolve("../../../dist/cesiumjs", 'scenario2_3Dpoints')
     },
     devtool: 'eval',
     node: {
@@ -27,6 +27,7 @@ module.exports = [{
         mainFields: ['module', 'main']
     },
     module: {
+        unknownContextCritical: false,
         rules: [{
             test: /\.css$/,
             use: ['style-loader', 'css-loader']
@@ -37,7 +38,8 @@ module.exports = [{
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: 'src/index.html'
+            template: 'src/index.html',
+            inject : true
         }),
         // Copy Cesium Assets, Widgets, and Workers to a static directory
         new CopyWebpackPlugin({
