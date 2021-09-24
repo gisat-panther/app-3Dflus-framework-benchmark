@@ -18,9 +18,7 @@ const settings = {
 }
 let guiNumOfPoints = gui.add(settings, 'numOfPoints', ['40 000', '400 000', '900 000', '1 700 000']).name('Number of points').listen();
 let guiBuildings = gui.add(settings, 'showBuildings').name('Show buildings').listen()
-
 // ---- GUI definition - end
-
 
 Ion.defaultAccessToken =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4NGNhMzk5NC1kYjk5LTQ5ZDEtOTM5Yy0zYmUyYWEwMjY5MmQiLCJpZCI6NTgyNjksImlhdCI6MTYyMzA1NTMyMX0.7jidfR2a2M5t8KsvDho5TJcBLBZl04UBj3jdeAB1otY";
@@ -28,8 +26,7 @@ Ion.defaultAccessToken =
 const DATA_URLS = {
     "los32": "https://ptr.gisat.cz/ftpstorage/applications/3dflus/test_data/interferometry/los/32.json",
     "los142": "https://ptr.gisat.cz/ftpstorage/applications/3dflus/test_data/interferometry/los/142.json",
-    // "los142Decimated": "https://ptr.gisat.cz/ftpstorage/applications/3dflus/test_data/interferometry/los/142_decimated.json",
-    "los142Decimated": "../../../data/interferometry/los/142_decimated.json",
+    "los142Decimated": "../../data/interferometry/los/142_decimated.json",
     "vertg32": "https://ptr.gisat.cz/ftpstorage/applications/3dflus/test_data/interferometry/vertg/32.json",
     "vertg142": "https://ptr.gisat.cz/ftpstorage/applications/3dflus/test_data/interferometry/vertg/142.json",
     "buildings": "https://ptr.gisat.cz/ftpstorage/applications/3dflus/test_data/buildings/manila_buildings_larger_than_250.geojson",
@@ -117,7 +114,7 @@ const displayPoints = () => {
 
 const displayBuildings = () => {
     if (settings.showBuildings && building_url.length > 0) {
-        loadBuildingData().then((features) => {
+        loadBuildingData(building_url).then((features) => {
             features.forEach((feature) => {
                 viewer.entities.add({
                     name: feature.properties.osm_id,
