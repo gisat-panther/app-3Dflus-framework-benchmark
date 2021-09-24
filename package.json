@@ -6,7 +6,17 @@
     "gh-pages": "^3.2.3"
   },
   "scripts": {
-    "build": "(cd src/deckgl/1000points && npm run build); (cd src/deckgl/XXXXpoints && npm run build);",
+    "build": "npm run builddeckgl && npm run buildcesiumjs",
+    "builddeckgl": "npm run builddeckgl1 && npm run builddeckgl2 && npm run builddeckgl3 && npm run builddeckgl4",
+    "builddeckgl1": "cd src/deckgl/scenario1_2Dpoints && npm run build",
+    "builddeckgl2": "cd src/deckgl/scenario2_3Dpoints && npm run build",
+    "builddeckgl3": "cd src/deckgl/scenario3_3Dvectors && npm run build",
+    "builddeckgl4": "cd src/deckgl/scenario4_animation && npm run build",
+    "buildcesiumjs": "npm run buildcesiumjs1 && npm run buildcesiumjs2 && npm run buildcesiumjs3 && npm run buildcesiumjs4",
+    "buildcesiumjs1": "cd src/cesiumjs/scenario1_2Dpoints && npm run build",
+    "buildcesiumjs2": "cd src/cesiumjs/scenario2_3Dpoints && npm run build",
+    "buildcesiumjs3": "cd src/cesiumjs/scenario3_3Dvectors && npm run build",
+    "buildcesiumjs4": "cd src/cesiumjs/scenario4_animation && npm run build",
     "deploy": "gh-pages -b gh-pages -d dist"
   },
   "browserslist": {
