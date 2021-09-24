@@ -1,0 +1,58 @@
+{
+  "name": "3DFlus-framework-benchmark-deckgl-scenario4",
+  "version": "0.1.0",
+  "homepage": "./",
+  "private": true,
+  "dependencies": {
+    "@deck.gl/core": "^8.5.2",
+    "@deck.gl/layers": "^8.5.2",
+    "@deck.gl/react": "^8.5.2",
+    "@loaders.gl/core": "^2.3.13",
+    "@loaders.gl/gis": "^3.0.8",
+    "@loaders.gl/json": "^3.0.8",
+    "@loaders.gl/mvt": "^3.0.8",
+    "@luma.gl/core": "8.5.5",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "array-shuffle": "^3.0.0",
+    "chroma-js": "^2.1.2",
+    "d3-scale": "^4.0.0",
+    "dat.gui": "^0.7.7",
+    "local-cors-proxy": "^1.1.0",
+    "prettier": "^2.3.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-map-gl": "^6.1.16",
+    "react-scripts": "4.0.3",
+    "web-vitals": "^1.0.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "proxy": "lcp --proxyUrl https://ptr.gisat.cz --port 4445 --origin http://localhost:3000 --proxyPartial \"\" --credentials",
+    "build": "cross-env BUILD_PATH='../../../dist/deckgl/scenario4_animation' react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
+  }
+}
