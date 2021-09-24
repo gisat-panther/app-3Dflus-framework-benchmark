@@ -14,13 +14,15 @@ import "./css/main.css";
 import chroma from "chroma-js";
 import arrayShuffle from 'array-shuffle';
 import * as dat from 'dat.gui';
+import {ANIMATION_URLS} from "./animation_urls"
+
 
 // ---- GUI definition - start
 const gui = new dat.GUI();
 const settings = {
-    animationType: "real data"
+    animationType: "real data 1 000"
 }
-let guiAnimType = gui.add(settings, 'animationType', ['real data', 'random data 10 000', 'random data 100 000']).name('Animation type').listen();
+let guiAnimType = gui.add(settings, 'animationType', ['real data 1 000', 'random data 10 000', 'random data 100 000']).name('Animation type').listen();
 // ---- GUI definition - end
 
 Ion.defaultAccessToken =
@@ -32,7 +34,6 @@ const URLS = ["https://ptr.gisat.cz/ftpstorage/applications/3dflus/test_data/int
 let animation_type = settings.animationType;
 let random_animated_points_count = 100000;
 
-const ANIMATED_POINTS_COUNT = 1000;
 const FRAME_MIN_TIME = 0.5;
 
 let clock = new Clock({});
@@ -69,21 +70,18 @@ function getRandomInt(min, max) {
 }
 
 const loadAnimatedData = (entireDataset) => {
-    let idList = entireDataset.map((item) => item.id);
-    let idListShorten = arrayShuffle(idList).slice(0, ANIMATED_POINTS_COUNT);
-
     let promisedData = [];
-    idListShorten.forEach((id) => {
-        const url = `https://ptr.gisat.cz/ftpstorage/applications/emsn091Manila/interferometry/los/32/${id}.json`;
-        // const url = `../../../data/interferometry_anim_data/los/32/${id}.json`;
+    ANIMATION_URLS.forEach((url) =>
         promisedData.push(
-            new Promise((resolve) => resolve(
-                fetch(url).then((response) => {
-                    return response.json();
-                })
-            ))
-        );
-    });
+            new Promise((resolve) =>
+                resolve(
+                    fetch(url).then((response) => {
+                        return response.json();
+                    })
+                )
+            )
+        )
+    );
     return Promise.all(promisedData).then((values) => values);
 }
 
@@ -126,7 +124,7 @@ const animate = () => {
         if (currentFrame === 0) {
             animatedPointsData[index].modified_height = d.properties.h_cop30m + 10000;
         }
-        if (animation_type === "real data") {
+        if (animation_type === "real data 1 000") {
             animatedPointsData[index].modified_height =
                 d.modified_height + d.d_timeline[currentFrame] * 10;
         } else {
@@ -138,7 +136,7 @@ const animate = () => {
         points.add({
             position: Cartesian3.fromDegrees(coord[0], coord[1], d.modified_height),
             color: Color.fromCssColorString(color.name()),
-            pixelSize: animation_type !== "real data" ? 4 : 6,
+            pixelSize: animation_type !== "real data 1 000" ? 4 : 6,
         });
     })
     requestAnimationFrame(animate)
@@ -158,7 +156,7 @@ const displayAnimation = () => {
         )
     );
 
-    if (animation_type === "real data") {
+    if (animation_type === "real data 1 000") {
         Promise.all(promisedData)
             .then((values) => {
                     let data = loadAnimatedData(values.flat())
