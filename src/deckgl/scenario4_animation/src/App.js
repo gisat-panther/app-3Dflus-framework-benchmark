@@ -13,7 +13,7 @@ import {ANIMATION_URLS} from "./animation_urls"
 // ---- GUI definition - start
 const gui = new dat.GUI();
 const settings = {
-    animationType: "random data 10 000"
+    animationType: "real data 1 000"
 }
 let guiAnimType = gui.add(settings, "animationType", ["real data 1 000", "random data 10 000", "random data 100 000", "random data 400 000"]).name("Animation type").listen();
 // ---- GUI definition - end

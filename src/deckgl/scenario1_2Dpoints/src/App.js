@@ -12,7 +12,7 @@ import * as dat from 'dat.gui'
 // ---- GUI definition - start
 const gui = new dat.GUI();
 const settings = {
-    numOfPoints: "900 000",
+    numOfPoints: "400 000",
     showBuildings: false
 }
 let guiNumOfPoints = gui.add(settings, 'numOfPoints', ['40 000', '400 000', '900 000', '1 700 000']).name('Number of points').listen();
