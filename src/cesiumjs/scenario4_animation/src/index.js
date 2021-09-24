@@ -143,31 +143,36 @@ const animate = () => {
 };
 
 const displayAnimation = () => {
-    let promisedData = [];
-    URLS.forEach((url) =>
-        promisedData.push(
-            new Promise((resolve) =>
-                resolve(
-                    fetch(url).then((response) => {
-                        return response.json();
-                    })
+    if (animation_type === "real data 1 000") {
+        let promisedData = [];
+        ANIMATION_URLS.forEach((url) =>
+            promisedData.push(
+                new Promise((resolve) =>
+                    resolve(
+                        fetch(url).then((response) => {
+                            return response.json();
+                        })
+                    )
                 )
             )
-        )
-    );
-
-    if (animation_type === "real data 1 000") {
-        Promise.all(promisedData)
-            .then((values) => {
-                    let data = loadAnimatedData(values.flat())
-                    data.then(data => {
-                            animatedPointsData = createTimeArrays(data)
-                            animate()
-                        }
-                    )
-                }
-            )
+        );
+        Promise.all(promisedData).then((values) => {
+            animatedPointsData = createTimeArrays(values.flat())
+            animate()
+        });
     } else {
+        let promisedData = [];
+        URLS.forEach((url) =>
+            promisedData.push(
+                new Promise((resolve) =>
+                    resolve(
+                        fetch(url).then((response) => {
+                            return response.json();
+                        })
+                    )
+                )
+            )
+        );
         Promise.all(promisedData).then(values => {
             let data = arrayShuffle(values.flat()).slice(0, random_animated_points_count);
             console.log("Data length: ", data.length);
