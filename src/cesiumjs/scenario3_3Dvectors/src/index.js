@@ -30,7 +30,7 @@ const DATA_URLS = {
     "los142": "https://ptr.gisat.cz/ftpstorage/applications/3dflus/test_data/interferometry/los/142.json",
     "vertg32": "https://ptr.gisat.cz/ftpstorage/applications/3dflus/test_data/interferometry/vertg/32.json",
     "vertg142": "https://ptr.gisat.cz/ftpstorage/applications/3dflus/test_data/interferometry/vertg/142.json",
-    "arrow": "../../glb/arrow.glb"
+    "arrow": "../../data/glb/arrow.glb"
 }
 const getObjectCount = (value) => {
     switch (value) {
