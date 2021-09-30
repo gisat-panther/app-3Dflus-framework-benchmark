@@ -122,9 +122,7 @@ const displayPoints = () => {
                 let data = values.flat();
                 console.log("Points count: ", data.length);
                 let i = 0
-                // data.forEach((d) => {
-                while (i < 10000) {
-                    const d = data[i];
+                data.forEach((d) => {
                     const coord = d.geometry.coordinates;
                     const color = colorScale(d.properties.vel_avg);
                     const height = d.properties.h_cop30m * 100;
@@ -180,9 +178,7 @@ const displayPoints = () => {
                     }));
                     pointLayer.addRenderable(surfaceCircle);
                     i++;
-                };
-                console.log("xxx", pointLayer);
-                // });
+                });
             })
             .catch((err) => {
                 console.log(err);
