@@ -2,9 +2,18 @@ import WorldWind from 'webworldwind-esa';
 import "./css/main.css";
 import chroma from "chroma-js";
 import * as dat from 'dat.gui';
-import WikimediaLayer from './WikimediaLayer';
 
-const {WorldWindow, Position, ElevationModel, SurfaceCircle, RenderableLayer, Location, Color, ShapeAttributes, Polygon} = WorldWind;
+const {
+    WorldWindow,
+    Position,
+    ElevationModel,
+    SurfaceCircle,
+    RenderableLayer,
+    Location,
+    Color,
+    ShapeAttributes,
+    Polygon
+} = WorldWind;
 
 // ---- GUI definition - start
 const gui = new dat.GUI();
@@ -12,7 +21,7 @@ const settings = {
     numOfPoints: "40 000",
     showBuildings: false
 }
-let guiNumOfPoints = gui.add(settings, 'numOfPoints', ['40 000', '400 000', '900 000', '1 700 000']).name('Number of points').listen();
+let guiNumOfPoints = gui.add(settings, 'numOfPoints', ['40 000', '100 000']).name('Number of points').listen();
 let guiBuildings = gui.add(settings, 'showBuildings').name('Show buildings').listen()
 // ---- GUI definition - end
 
@@ -26,22 +35,19 @@ const DATA_URLS = {
     "buildings": "https://ptr.gisat.cz/ftpstorage/applications/3dflus/test_data/buildings/manila_buildings_larger_than_250.geojson",
 }
 
+const MAX_POLYGON_COUNT = 20000;
+const MAX_POINT_COUNT = 100000
+
 const getPointUrls = (number) => {
     switch (number) {
         case "40 000":
             point_urls = [DATA_URLS.los142Decimated]
             break;
-        case "400 000":
+        case "100 000":
             point_urls = [DATA_URLS.los142]
-            break;
-        case "900 000":
-            point_urls = [DATA_URLS.los32, DATA_URLS.los142]
-            break;
-        case "1 700 000":
-            point_urls = [DATA_URLS.los32, DATA_URLS.los142, DATA_URLS.vertg32, DATA_URLS.vertg142]
             break;
         default:
-            point_urls = [DATA_URLS.los142]
+            point_urls = [DATA_URLS.los142Decimated]
     }
 }
 
@@ -68,24 +74,15 @@ const loadBuildingData = async (url) => {
 };
 
 
-const elevationModel = new 	ElevationModel();
+const elevationModel = new ElevationModel();
 const wwd = new WorldWindow('map', elevationModel);
 wwd.navigator.lookAtLocation.latitude = 14.7569
 wwd.navigator.lookAtLocation.longitude = 120.81321;
 wwd.navigator.range = 200000;
 
 
-const wikimediaLayer = new WikimediaLayer({
-    attribution:
-        'Wikimedia maps - Map data \u00A9 OpenStreetMap contributors',
-    sourceObject: {
-        host: 'maps.wikimedia.org',
-        path: 'osm-intl',
-        protocol: 'https',
-    },
-});
-
-wwd.addLayer(wikimediaLayer);
+wwd.addLayer(new WorldWind.BMNGOneImageLayer());
+wwd.addLayer(new WorldWind.BMNGLandsatLayer());
 
 //layer for points
 const pointLayer = new RenderableLayer();
@@ -94,8 +91,6 @@ wwd.addLayer(pointLayer);
 wwd.addLayer(buildingsLayer);
 
 wwd.redraw();
-
-
 
 
 const displayPoints = () => {
@@ -116,21 +111,22 @@ const displayPoints = () => {
         .then((values) => {
             let data = values.flat();
             console.log("Points count: ", data.length);
-            data.forEach((d) => {
-                const coord = d.geometry.coordinates;
-                const color = colorScale(d.properties.vel_avg);
-                const surfaceCircle = new SurfaceCircle(new Location(coord[1], coord[0]), 100, new ShapeAttributes({
-                    _drawOutline: false,
-                    _interiorColor: new Color(color.rgb()[0]/255, color.rgb()[1]/255, color.rgb()[2]/255, 1),
-                    _drawInterior: true,
-                    _drawOutline: false,
-                    _outlineColor: new Color(0,0,0,0),
-                    _outlineStippleFactor: 0,
-                    _outlineStipplePattern:0,
-                    _outlineWidth: 0,
+            data.forEach((d, index) => {
+                if (index < MAX_POINT_COUNT) {
+                    const coord = d.geometry.coordinates;
+                    const color = colorScale(d.properties.vel_avg);
+                    const surfaceCircle = new SurfaceCircle(new Location(coord[1], coord[0]), 100, new ShapeAttributes({
+                        _drawOutline: false,
+                        _interiorColor: new Color(color.rgb()[0] / 255, color.rgb()[1] / 255, color.rgb()[2] / 255, 1),
+                        _drawInterior: true,
+                        _outlineColor: new Color(0, 0, 0, 0),
+                        _outlineStippleFactor: 0,
+                        _outlineStipplePattern: 0,
+                        _outlineWidth: 0,
 
-                }));
-                pointLayer.addRenderable(surfaceCircle);
+                    }));
+                    pointLayer.addRenderable(surfaceCircle);
+                }
             });
         })
         .catch((err) => {
@@ -141,14 +137,16 @@ const displayPoints = () => {
 const displayBuildings = () => {
     if (settings.showBuildings && building_url.length > 0) {
         loadBuildingData(building_url).then((features) => {
-            const boundaries = [];
-            features.forEach((feature) => {
-                const b = [];
-                for(const point of feature.geometry.coordinates[0].flat()) {
-                    b.push(new WorldWind.Position(...point, Math.random() * 100));
+            let boundaries = [];
+            features.forEach((feature, index) => {
+                if (index < MAX_POLYGON_COUNT) {
+                    const b = [];
+                    const height = Math.random() * 1000
+                    for (const point of feature.geometry.coordinates[0].flat()) {
+                        b.push(new WorldWind.Position(point[1], point[0], height));
+                    }
+                    boundaries.push(b);
                 }
-
-                boundaries.push(b);
             });
 
             const polygon = new Polygon(boundaries, null);
@@ -159,8 +157,8 @@ const displayBuildings = () => {
             const polygonAttributes = new ShapeAttributes(null);
             polygonAttributes.drawInterior = true;
             polygonAttributes.drawOutline = true;
-            polygonAttributes.outlineColor = WorldWind.Color.BLUE;
-            polygonAttributes.interiorColor = new WorldWind.Color(0, 1, 1, 0.5);
+            polygonAttributes.outlineColor = new WorldWind.Color(160 / 255, 250 / 255, 180 / 255, 0.9);
+            polygonAttributes.interiorColor = new WorldWind.Color(136 / 255, 202 / 255, 151 / 255, 0.9);
             polygonAttributes.drawVerticals = polygon.extrude;
             polygonAttributes.applyLighting = true;
             polygon.attributes = polygonAttributes;
