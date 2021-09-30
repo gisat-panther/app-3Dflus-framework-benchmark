@@ -44,7 +44,6 @@ module.exports = [{
         new CopyWebpackPlugin({
             patterns: [
                 { from: 'node_modules/webworldwind-esa/build/dist/images', to: 'images' },
-                { from: 'node_modules/webworldwind-esa/build/dist/images', to: 'images' },
             ],
         }),
         // new webpack.DefinePlugin({

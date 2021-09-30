@@ -20,6 +20,7 @@
     "buildwwwjs": "npm run buildwwwjs1",
     "buildwwwjs1": "cd src/webworldwind/scenario1_2Dpoints && npm run build",
     "buildwwwjs2": "cd src/webworldwind/scenario2_3Dpoints && npm run build",
+    "buildwwwjs4": "cd src/webworldwind/scenario4_animation && npm run build",
     "deploy": "gh-pages -b gh-pages -d dist"
   },
   "browserslist": {
