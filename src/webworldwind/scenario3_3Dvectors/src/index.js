@@ -25,7 +25,7 @@ const settings = {
     numOfPoints: "1 000",
     showTerrain: false
 }
-let guiNumOfPoints = gui.add(settings, 'numOfPoints', ['1 000', '10 000']).name('Number of points').listen();
+let guiNumOfPoints = gui.add(settings, 'numOfPoints', ['1 000', '10 000']).name('Number of arrows').listen();
 
 // ---- GUI definition - end
 
@@ -116,19 +116,15 @@ const displayPoints = () => {
                     const height = d.properties.h_cop30m * 100;
                     const position = new Position(coord[1], coord[0], height);
 
-                    const config = {dirPath: './data/collada/'};
+                    // const config = {dirPath: './data/collada/'};
+                    const config = {dirPath: 'https://gisat-panther.github.io/app-3Dflus-framework-benchmark/data/collada/'};
                     let colladaLoader = new ColladaLoader(position, config);
 
                     colladaLoader.load("arrow.dae", function (colladaModel) {
                         colladaModel.scale = 3000 + d.properties.vel_avg * 100;
                         colladaModel.xRotation = d.properties.az_ang;
                         colladaModel.yRotation = d.properties.inc_ang;
-                        // colladaModel._entities.forEach(entity=> {
-                        //     entity.material.diffuse = [...color.rgb(), 1];
-                        //     entity.material.specular = [...color.rgb(), 1];
-                        // })
-                        colladaModel.materials.b0b0b0.diffuse = [...color.rgb(), 1];
-                        // colladaModel.materials.b0b0b0.specular = [...color.rgb(), 1];
+                        colladaModel.materials.b0b0b0.diffuse = [color.rgb()[0]/255, color.rgb()[1]/255, color.rgb()[2]/255, 1];
                         modelLayer.addRenderable(colladaModel);
                     });
                 }

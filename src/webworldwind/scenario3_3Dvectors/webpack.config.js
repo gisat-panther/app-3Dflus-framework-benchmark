@@ -12,7 +12,7 @@ module.exports = [{
     },
     output: {
         filename: '[name].js',
-        path: path.resolve("../../../dist/webworldwind", 'scenario2_3Dpoints')
+        path: path.resolve("../../../dist/webworldwind", 'scenario3_3Dvectors')
     },
     devtool: 'eval',
     node: {
