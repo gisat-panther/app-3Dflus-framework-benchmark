@@ -17,9 +17,10 @@
     "buildcesiumjs2": "cd src/cesiumjs/scenario2_3Dpoints && npm run build",
     "buildcesiumjs3": "cd src/cesiumjs/scenario3_3Dvectors && npm run build",
     "buildcesiumjs4": "cd src/cesiumjs/scenario4_animation && npm run build",
-    "buildwwwjs": "npm run buildwwwjs1",
+    "buildwwwjs": "npm run buildwwwjs1 && npm run buildwwwjs2 && npm run buildwwwjs3 && npm run buildwwwjs4",
     "buildwwwjs1": "cd src/webworldwind/scenario1_2Dpoints && npm run build",
     "buildwwwjs2": "cd src/webworldwind/scenario2_3Dpoints && npm run build",
+    "buildwwwjs3": "cd src/webworldwind/scenario3_3Dvectors && npm run build",
     "buildwwwjs4": "cd src/webworldwind/scenario4_animation && npm run build",
     "deploy": "gh-pages -b gh-pages -d dist"
   },
