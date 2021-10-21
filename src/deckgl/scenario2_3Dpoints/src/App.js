@@ -7,6 +7,7 @@ import chroma from "chroma-js";
 import {load} from "@loaders.gl/core";
 import {COORDINATE_SYSTEM} from "@deck.gl/core";
 import * as dat from 'dat.gui'
+import {TerrainLayer} from '@deck.gl/geo-layers';
 
 
 // ---- GUI definition - start
@@ -28,6 +29,10 @@ const INITIAL_VIEW_STATE = {
 
 const MAPBOX_ACCESS_TOKEN =
     "pk.eyJ1IjoibWFyaWRhbmkiLCJhIjoiSGF2TGdwZyJ9.B0N8ybRGG38wmRK_VfxPoA";
+
+// const TERRAIN_IMAGE = `https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}.png?access_token=${MAPBOX_ACCESS_TOKEN}`;
+const SURFACE_IMAGE = `https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}@2x.png?access_token=${MAPBOX_ACCESS_TOKEN}`;
+const EXAGG = 50;
 
 const DATA_URLS = {
     "los32": "https://ptr.gisat.cz/ftpstorage/applications/3dflus/test_data/interferometry/los/32.json",
@@ -113,6 +118,21 @@ export default class App extends Component {
                     getColor: (d) => colorScale(d.properties.vel_avg).rgb(),
                 })
             );
+
+            layers.push(
+                new TerrainLayer({
+                    //https://github.com/tilezen/joerd/blob/master/docs/formats.md
+                    elevationDecoder: {
+                        rScaler: 256*EXAGG,
+                        gScaler: EXAGG,
+                        bScaler: 1/256/EXAGG,
+                        offset: -32768*EXAGG
+                    },
+                    // texture: SURFACE_IMAGE,
+                    elevationData: './data/Copernicus_DSM_10_merged_height-image_1000.png',
+                    bounds: [119.99986111111112, 13.999861111111109, 122.0001388888889, 16.000138888888888],
+                })
+            )
         }
 
         return (
