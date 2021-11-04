@@ -24,6 +24,7 @@ const INITIAL_VIEW_STATE = {
     longitude: 120.81321,
     latitude: 14.7569,
     zoom: 10,
+    maxPitch:120
 };
 
 
@@ -32,7 +33,7 @@ const MAPBOX_ACCESS_TOKEN =
 
 // const TERRAIN_IMAGE = `https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}.png?access_token=${MAPBOX_ACCESS_TOKEN}`;
 const SURFACE_IMAGE = `https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}@2x.png?access_token=${MAPBOX_ACCESS_TOKEN}`;
-const EXAGG = 50;
+const EXAGG = 20;
 
 const DATA_URLS = {
     "los32": "https://ptr.gisat.cz/ftpstorage/applications/3dflus/test_data/interferometry/los/32.json",
