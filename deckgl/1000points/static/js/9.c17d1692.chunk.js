@@ -1,2 +1,0 @@
-(this["webpackJsonp3DFlus-framework-benchmark"]=this["webpackJsonp3DFlus-framework-benchmark"]||[]).push([[9],{288:function(e,t,r){"use strict";r.r(t),r.d(t,"default",(function(){return o}));var n=r(1),a=r(2),c=r(7),u=r(8),i=r(283),o=function(e){Object(c.a)(r,e);var t=Object(u.a)(r);function r(){return Object(n.a)(this,r),t.apply(this,arguments)}return Object(a.a)(r,[{key:"decodeBlock",value:function(e){return Object(i.a)(new Uint8Array(e)).buffer}}]),r}(r(282).a)}}]);
-//# sourceMappingURL=9.c17d1692.chunk.js.map
