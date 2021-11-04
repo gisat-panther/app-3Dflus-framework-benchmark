@@ -8,6 +8,7 @@
   "scripts": {
     "build": "npm run builddeckgl && npm run buildcesiumjs && npm run buildwwwjs",
     "builddeckgl": "npm run builddeckgl1 && npm run builddeckgl2 && npm run builddeckgl3 && npm run builddeckgl4",
+    "builddeckgl0": "cd src/deckgl/1000points && npm run build",
     "builddeckgl1": "cd src/deckgl/scenario1_2Dpoints && npm run build",
     "builddeckgl2": "cd src/deckgl/scenario2_3Dpoints && npm run build",
     "builddeckgl3": "cd src/deckgl/scenario3_3Dvectors && npm run build",

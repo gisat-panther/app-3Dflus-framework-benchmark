@@ -1,6 +1,8 @@
 # 3DFLUS framework benchmark
 
-Visualization of four benchmark scenarios using different frameworks
+Visualization of four benchmark scenarios using different frameworks.
+
+**Update:** [11/4/2021] basemaps in deck.gl implementations have been changed from Mapbox to open source CARTO basemaps. There is still option to render Mapbox basemaps, fill in your own Mapbox token in the *MAPBOX_ACCESS_TOKEN* constant in the corresponding *App.js* file.
 
 #### Scenario 1: 2D points and 3D polygons
 - [visualization in cesium.js](https://gisat-panther.github.io/app-3Dflus-framework-benchmark/cesiumjs/scenario1_2Dpoints/)

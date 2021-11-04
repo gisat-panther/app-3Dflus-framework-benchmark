@@ -14,6 +14,7 @@ import {SimpleMeshLayer} from "@deck.gl/mesh-layers";
 import {OBJLoader} from "@loaders.gl/obj";
 import {scaleLinear} from "d3-scale";
 import arrayShuffle from "array-shuffle";
+import {BASEMAP} from '@deck.gl/carto';
 
 const INITIAL_VIEW_STATE = {
     longitude: 120.81321,
@@ -44,8 +45,9 @@ let timelineDates = [];
 let buildingsCount = 0;
 let pointsCount = 0;
 
-const MAPBOX_ACCESS_TOKEN =
-    "pk.eyJ1IjoibWFyaWRhbmkiLCJhIjoiSGF2TGdwZyJ9.B0N8ybRGG38wmRK_VfxPoA";
+// if you want to use mapbox background layers fill in your mapbox token
+// when MAPBOX_ACCESS_TOKEN is empty, background layer from "CARTO basemaps" is used instead
+const MAPBOX_ACCESS_TOKEN = "";
 
 const SHP_URL = "./data/manila_buildings_larger_than_250.shp";
 
@@ -89,6 +91,7 @@ export default class App extends Component {
         shpData: [],
         terrainData: [],
         terrainBoundingBox: [],
+        mapStyle: MAPBOX_ACCESS_TOKEN.length > 0 ? 'mapbox://styles/mapbox/satellite-v9' : BASEMAP.POSITRON
     };
 
     componentDidMount() {
@@ -183,11 +186,10 @@ export default class App extends Component {
             if (currentFrame === 0) {
                 animatedData[index].modified_height = item.properties.h_cop30m + 50000;
             }
-            if (FAKED_ANIMATED_POINTS){
+            if (FAKED_ANIMATED_POINTS) {
                 animatedData[index].modified_height =
-                    item.modified_height + getRandomInt(-2000,2000)
-            }
-            else {
+                    item.modified_height + getRandomInt(-2000, 2000)
+            } else {
                 animatedData[index].modified_height =
                     item.modified_height + item.d_timeline[currentFrame];
             }
@@ -260,7 +262,7 @@ export default class App extends Component {
                     data: this.state.animatedData,
                     pickable: false,
                     coordinateSystem: COORDINATE_SYSTEM.LNGLAT,
-                    pointSize: FAKED_ANIMATED_POINTS? 1 : 6,
+                    pointSize: FAKED_ANIMATED_POINTS ? 1 : 6,
                     getPosition: (d) => [...d.geometry.coordinates, d.modified_height],
                     getColor: (d) => colorScale(d.properties.vel_avg).rgb(),
                 })

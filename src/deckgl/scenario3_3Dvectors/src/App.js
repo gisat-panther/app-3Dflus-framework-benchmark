@@ -8,6 +8,7 @@ import {SimpleMeshLayer} from "@deck.gl/mesh-layers";
 import {OBJLoader} from "@loaders.gl/obj";
 import {scaleLinear} from "d3-scale";
 import * as dat from 'dat.gui'
+import {BASEMAP} from '@deck.gl/carto';
 
 // ---- GUI definition - start
 const gui = new dat.GUI();
@@ -23,8 +24,10 @@ const INITIAL_VIEW_STATE = {
     zoom: 10,
 };
 
-const MAPBOX_ACCESS_TOKEN =
-    "pk.eyJ1IjoibWFyaWRhbmkiLCJhIjoiSGF2TGdwZyJ9.B0N8ybRGG38wmRK_VfxPoA";
+
+// if you want to use mapbox background layers fill in your mapbox token
+// when MAPBOX_ACCESS_TOKEN is empty, background layer from "CARTO basemaps" is used instead
+const MAPBOX_ACCESS_TOKEN = "";
 
 const DATA_URLS = {
     "los32": "https://ptr.gisat.cz/ftpstorage/applications/3dflus/test_data/interferometry/los/32.json",
@@ -64,7 +67,7 @@ let sizeScale = scaleLinear().domain([-30, 10]).range([4, 1]);
 export default class App extends Component {
     state = {
         jsonData: [],
-        mapStyle: 'mapbox://styles/mapbox/satellite-v9',
+        mapStyle: MAPBOX_ACCESS_TOKEN.length > 0 ? 'mapbox://styles/mapbox/satellite-v9' : BASEMAP.POSITRON,
     };
 
     componentDidMount() {

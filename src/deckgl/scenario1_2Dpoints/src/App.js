@@ -7,6 +7,7 @@ import {JSONLoader} from "@loaders.gl/json";
 import chroma from "chroma-js";
 import {load} from "@loaders.gl/core";
 import * as dat from 'dat.gui'
+import {BASEMAP} from '@deck.gl/carto';
 
 
 // ---- GUI definition - start
@@ -27,8 +28,9 @@ const INITIAL_VIEW_STATE = {
     zoom: 10,
 };
 
-const MAPBOX_ACCESS_TOKEN =
-    "pk.eyJ1IjoibWFyaWRhbmkiLCJhIjoiSGF2TGdwZyJ9.B0N8ybRGG38wmRK_VfxPoA";
+// if you want to use mapbox background layers fill in your mapbox token
+// when MAPBOX_ACCESS_TOKEN is empty, background layer from "CARTO basemaps" is used instead
+const MAPBOX_ACCESS_TOKEN = "";
 
 const DATA_URLS = {
     "los32": "https://ptr.gisat.cz/ftpstorage/applications/3dflus/test_data/interferometry/los/32.json",
@@ -79,7 +81,7 @@ let heightColorScale = chroma
 
 export default class App extends Component {
     state = {
-        mapStyle: 'mapbox://styles/mapbox/satellite-v9',
+        mapStyle: MAPBOX_ACCESS_TOKEN.length > 0 ? 'mapbox://styles/mapbox/satellite-v9' : BASEMAP.POSITRON,
         jsonData: [],
         shpData: [],
     };

@@ -3,8 +3,12 @@
   "version": "0.1.0",
   "homepage": "./",
   "private": true,
+  "devDependencies": {
+    "cross-env": "^7.0.3"
+  },
   "dependencies": {
     "@deck.gl/aggregation-layers": "^8.5.5",
+    "@deck.gl/carto": "^8.6.2",
     "@deck.gl/core": "^8.5.2",
     "@deck.gl/geo-layers": "^8.5.5",
     "@deck.gl/layers": "^8.5.2",
@@ -16,7 +20,7 @@
     "@loaders.gl/mvt": "^3.0.8",
     "@loaders.gl/obj": "3.0.11",
     "@loaders.gl/shapefile": "^3.0.9",
-    "@luma.gl/core": "8.5.5",
+    "@luma.gl/core": "^8.5.10",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -29,14 +33,14 @@
     "prettier": "^2.3.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-map-gl": "^6.1.16",
+    "react-map-gl": "^5.3.17",
     "react-scripts": "4.0.3",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "proxy": "lcp --proxyUrl https://ptr.gisat.cz --port 4445 --origin http://localhost:3000 --proxyPartial \"\" --credentials",
-    "build": "BUILD_PATH='../../../dist/deckgl/1000points' react-scripts build",
+    "build": "cross-env BUILD_PATH='../../../dist/deckgl/1000points' react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
