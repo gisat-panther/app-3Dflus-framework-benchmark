@@ -24,3 +24,5 @@ yarn-debug.log*
 yarn-error.log*
 .idea
 public/data
+src/deckgl/scenario2_3Dpoints/public/data/Copernicus_DSM_10_merged_height-image0.25.png
+src/deckgl/scenario2_3Dpoints/public/data/Copernicus_DSM_10_merged_height-image0.5.png
