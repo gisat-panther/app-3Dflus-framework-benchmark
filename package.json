@@ -13,6 +13,7 @@
     "builddeckgl2": "cd src/deckgl/scenario2_3Dpoints && npm run build",
     "builddeckgl3": "cd src/deckgl/scenario3_3Dvectors && npm run build",
     "builddeckgl4": "cd src/deckgl/scenario4_animation && npm run build",
+    "builddeckgl5": "cd src/deckgl/animation_trajectories && npm run build",
     "buildcesiumjs": "npm run buildcesiumjs1 && npm run buildcesiumjs2 && npm run buildcesiumjs3 && npm run buildcesiumjs4",
     "buildcesiumjs1": "cd src/cesiumjs/scenario1_2Dpoints && npm run build",
     "buildcesiumjs2": "cd src/cesiumjs/scenario2_3Dpoints && npm run build",
