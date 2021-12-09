@@ -33,24 +33,24 @@ const MAPBOX_ACCESS_TOKEN = "";
 const step = 1;
 const intervalMS = 30;
 
-let maxMinFrames = [0, 1]
-
+let minMaxFrames = [0, 1]
+let minMaxAbsChange = [100000,0]
 let colorScale = chroma
     .scale(["#fda34b", "#ff7882", "#c8699e", "#7046aa", "#0c1db8", "#2eaaac"])
+    // .scale(["#2eaaac", "#0c1db8", "#7046aa", "#c8699e", "#ff7882", "#fda34b"])
     .domain([-30, 10]);
 
 const getDate = (dateNumber) => {
-    if (dateNumber){
+    if (dateNumber) {
         const dateString = dateNumber.toString()
-        return `${dateString.substring(0,4)}-${dateString.substring(4,6)}-${dateString.substring(6,8)}`
-    }
-    else return ""
+        return `${dateString.substring(0, 4)}-${dateString.substring(4, 6)}-${dateString.substring(6, 8)}`
+    } else return ""
 }
 
 
 export default class App extends Component {
     state = {
-        time: maxMinFrames[0],
+        time: minMaxFrames[0],
         jsonData: [],
         tripData: [],
         animatedData: [],
@@ -69,8 +69,8 @@ export default class App extends Component {
 
     _setTime = () => {
         let newTime = this.state.time + step;
-        if (newTime >= maxMinFrames[1]){
-            newTime = maxMinFrames[0]
+        if (newTime >= minMaxFrames[1]) {
+            newTime = minMaxFrames[0]
         }
         this.setState({
             time: newTime,
@@ -94,27 +94,35 @@ export default class App extends Component {
             let tripTrajectory = {
                 id: item.id,
                 path: [],
+                heightChange: 0
                 // timestamps: []
             }
             let timestampIdx = 0
             Object.entries(item.properties).forEach(([key, value]) => {
                 if (key.startsWith("d_")) {
+                    tripTrajectory.heightChange += Number(value)
                     const previousHeight = timestampIdx === 0 ? item.properties.h_cop30m + 50000 : tripTrajectory.path[timestampIdx - 1][2]
-                    tripTrajectory.path.push([item.geometry.coordinates[0]+timestampIdx/10000, item.geometry.coordinates[1]+timestampIdx/10000, previousHeight + value])
-                    if (!timestampsCreated){
+                    tripTrajectory.path.push([item.geometry.coordinates[0] + timestampIdx / 10000, item.geometry.coordinates[1] + timestampIdx / 10000, previousHeight + value])
+                    if (!timestampsCreated) {
                         timestampsGeneral.push(parseInt(key.substring(2)))
                     }
                     // tripTrajectory.timestamps.push(parseInt(key.substring(2)))
                     timestampIdx++
                 }
             });
+            minMaxAbsChange[0] = tripTrajectory.heightChange < minMaxAbsChange[0] ? tripTrajectory.heightChange : minMaxAbsChange[0];
+            minMaxAbsChange[1] = tripTrajectory.heightChange > minMaxAbsChange[1] ? tripTrajectory.heightChange : minMaxAbsChange[1];
             tripData.push(tripTrajectory)
-            if (!timestampsCreated && this.state.timestampsGeneral.length === 0 ){
-                maxMinFrames[1] = timestampsGeneral.length
-                this.setState({timestampsGeneral:  timestampsGeneral, timestampsGeneralIndex: [...Array(maxMinFrames[1]).keys()]})
+            if (!timestampsCreated && this.state.timestampsGeneral.length === 0) {
+                minMaxFrames[1] = timestampsGeneral.length
+                this.setState({
+                    timestampsGeneral: timestampsGeneral,
+                    timestampsGeneralIndex: [...Array(minMaxFrames[1]).keys()]
+                })
                 timestampsCreated = true
             }
         });
+        colorScale.domain(minMaxAbsChange)
         this.setState({tripData})
     };
 
@@ -137,7 +145,7 @@ export default class App extends Component {
                     id: "point-layer",
                     data: this.state.tripData,
                     coordinateSystem: COORDINATE_SYSTEM.LNGLAT,
-                    pointSize: 2,
+                    pointSize: 1,
                     getPosition: (d) => d.path[80],
                     getColor: [253, 5, 255],
                 }),
@@ -147,8 +155,8 @@ export default class App extends Component {
                     getPath: (d) => d.path,
                     coordinateSystem: COORDINATE_SYSTEM.LNGLAT,
                     getTimestamps: (d) => this.state.timestampsGeneralIndex,
-                    getColor: [5, 128, 93],
-                    widthMinPixels: 5,
+                    getColor: (d) => colorScale(d.heightChange).rgb(),
+                    widthMinPixels: 4,
                     fadeTrail: true,
                     trailLength: 100000,
                     currentTime: this.state.time,
