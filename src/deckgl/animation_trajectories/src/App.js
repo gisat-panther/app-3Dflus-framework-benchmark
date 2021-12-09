@@ -30,23 +30,32 @@ const INITIAL_VIEW_STATE = {
 const MAPBOX_ACCESS_TOKEN = "";
 
 
-const step = 200;
-const intervalMS = 15;
+const step = 1;
+const intervalMS = 30;
 
-const maxMinTime = [20141019, 20210304]
+let maxMinFrames = [0, 1]
 
 let colorScale = chroma
     .scale(["#fda34b", "#ff7882", "#c8699e", "#7046aa", "#0c1db8", "#2eaaac"])
     .domain([-30, 10]);
 
+const getDate = (dateNumber) => {
+    if (dateNumber){
+        const dateString = dateNumber.toString()
+        return `${dateString.substring(0,4)}-${dateString.substring(4,6)}-${dateString.substring(6,8)}`
+    }
+    else return ""
+}
+
 
 export default class App extends Component {
     state = {
-        time: maxMinTime[0],
+        time: maxMinFrames[0],
         jsonData: [],
         tripData: [],
         animatedData: [],
-        timestamps_general: [],
+        timestampsGeneral: [],
+        timestampsGenralIndex: [],
         mapStyle: MAPBOX_ACCESS_TOKEN.length > 0 ? 'mapbox://styles/mapbox/satellite-v9' : BASEMAP.POSITRON,
     };
 
@@ -60,8 +69,8 @@ export default class App extends Component {
 
     _setTime = () => {
         let newTime = this.state.time + step;
-        if (newTime >= maxMinTime[1]){
-            newTime = maxMinTime[0]
+        if (newTime >= maxMinFrames[1]){
+            newTime = maxMinFrames[0]
         }
         this.setState({
             time: newTime,
@@ -78,8 +87,9 @@ export default class App extends Component {
     _createTimeArrays = () => {
         let animatedData = this.state.animatedData;
         let tripData = [];
-        let timestamps_general = []
-        let timestamps_created = false
+        // for timestamps that are same for all points, timestamps can be saved only once, not associating the same array for each trip
+        let timestampsGeneral = []
+        let timestampsCreated = false
         animatedData.forEach((item, index) => {
             let tripTrajectory = {
                 id: item.id,
@@ -91,17 +101,18 @@ export default class App extends Component {
                 if (key.startsWith("d_")) {
                     const previousHeight = timestampIdx === 0 ? item.properties.h_cop30m + 50000 : tripTrajectory.path[timestampIdx - 1][2]
                     tripTrajectory.path.push([item.geometry.coordinates[0]+timestampIdx/10000, item.geometry.coordinates[1]+timestampIdx/10000, previousHeight + value])
-                    if (!timestamps_created){
-                        timestamps_general.push(parseInt(key.substring(2)))
+                    if (!timestampsCreated){
+                        timestampsGeneral.push(parseInt(key.substring(2)))
                     }
                     // tripTrajectory.timestamps.push(parseInt(key.substring(2)))
                     timestampIdx++
                 }
             });
             tripData.push(tripTrajectory)
-            if (!timestamps_created && this.state.timestamps_general.length === 0 ){
-                this.setState({timestamps_general:  timestamps_general})
-                timestamps_created = true
+            if (!timestampsCreated && this.state.timestampsGeneral.length === 0 ){
+                maxMinFrames[1] = timestampsGeneral.length
+                this.setState({timestampsGeneral:  timestampsGeneral, timestampsGeneralIndex: [...Array(maxMinFrames[1]).keys()]})
+                timestampsCreated = true
             }
         });
         this.setState({tripData})
@@ -135,7 +146,7 @@ export default class App extends Component {
                     data: this.state.tripData,
                     getPath: (d) => d.path,
                     coordinateSystem: COORDINATE_SYSTEM.LNGLAT,
-                    getTimestamps: (d) => this.state.timestamps_general,
+                    getTimestamps: (d) => this.state.timestampsGeneralIndex,
                     getColor: [5, 128, 93],
                     widthMinPixels: 5,
                     fadeTrail: true,
@@ -155,7 +166,7 @@ export default class App extends Component {
                     <StaticMap
                         mapboxApiAccessToken={MAPBOX_ACCESS_TOKEN}
                         mapStyle={this.state.mapStyle}/>
-                    <div>Current Time: {this.state.time}</div>
+                    <div>Current Time: {getDate(this.state.timestampsGeneral[this.state.time])}</div>
                 </DeckGL>
             </div>
         );
