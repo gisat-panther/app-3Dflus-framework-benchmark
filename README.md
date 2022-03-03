@@ -1,7 +1,9 @@
 # 3DFLUS 
 
-Exploration of available deck.gl functionalities to visualize animated trajectories.
+Implementation of custom layers subclassed layer to create segmented path, following example was used:
 
-Demo here:
+https://deck.gl/docs/developer-guide/custom-layers/subclassed-layers
 
-https://gisat-panther.github.io/app-3Dflus-framework-benchmark/deckgl/animation_trajectories/
+Check this folder:
+
+https://github.com/gisat-panther/app-3Dflus-framework-benchmark/tree/deckgl-customLayers/src/deckgl/animation_trajectories
