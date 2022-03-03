@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import DeckGL from "@deck.gl/react";
-import {PointCloudLayer, PathLayer, LineLayer} from "@deck.gl/layers";
+import {PointCloudLayer, LineLayer} from "@deck.gl/layers";
 import {StaticMap} from "react-map-gl";
 import {JSONLoader} from "@loaders.gl/json";
 import chroma from "chroma-js";
@@ -11,13 +11,14 @@ import {ANIMATION_URLS} from "./animation_urls";
 import {BASEMAP} from '@deck.gl/carto';
 import {TripsLayer} from "@deck.gl/geo-layers";
 import {scaleLinear} from "d3-scale";
+import MultiColorPathLayer from "./MultiColorPathLayer"
 
 // ---- GUI definition - start
 const gui = new dat.GUI();
 const settings = {
     visualizationType: "tripsLayer"
 }
-let guiAnimType = gui.add(settings, "visualizationType", ["lineLayer", "tripsLayer", "tripsLayerSegmented"]).name("Visualization type").listen();
+let guiAnimType = gui.add(settings, "visualizationType", ["multiColorPathLayer", "lineLayer", "tripsLayer", "tripsLayerSegmented"]).name("Visualization type").listen();
 // ---- GUI definition - end
 
 const INITIAL_VIEW_STATE = {
@@ -69,6 +70,7 @@ export default class App extends Component {
         tripData: [],
         animatedData: [],
         lineData: [],
+        multiColorPathData: [],
         timestampsGeneral: [],
         timestampsGenralIndex: [],
         mapStyle: MAPBOX_ACCESS_TOKEN.length > 0 ? 'mapbox://styles/mapbox/satellite-v9' : BASEMAP.POSITRON,
@@ -105,6 +107,7 @@ export default class App extends Component {
         let tripData = [];
         let tripSegmentedData = []
         let lineData = [];
+        let multiColorPathData = [];
         // for timestamps that are same for all points, timestamps can be saved only once, not associating the same array for each trip
         let timestampsGeneral = []
         let timestampsCreated = false
@@ -114,6 +117,12 @@ export default class App extends Component {
                 path: [],
                 heightChange: 0
                 // timestamps: []
+            }
+
+            let multiColorTrajectory = {
+                id: item.id,
+                path: [],
+                color: []
             }
 
             let timestampIdx = 0
@@ -130,6 +139,8 @@ export default class App extends Component {
                     modifiedHeights.push(value)
                     tripTrajectory.path.push([item.geometry.coordinates[0] + timestampIdx / 10000, item.geometry.coordinates[1] + timestampIdx / 10000, previousHeight + value])
                     // tripTrajectory.path.push([item.geometry.coordinates[0] + timestampIdx / 10000, item.geometry.coordinates[1] + timestampIdx / 10000, item.properties.h_cop30m + 50000 + value * 100])
+                    multiColorTrajectory.path.push([item.geometry.coordinates[0] + timestampIdx / 10000, item.geometry.coordinates[1] + timestampIdx / 10000, previousHeight + value])
+                    multiColorTrajectory.color.push(colorScaleMinMaxChange(value).rgb())
                     lineData.push({
                         pathIdx: index,
                         heightIdx: timestampIdx
@@ -162,6 +173,7 @@ export default class App extends Component {
             minMaxAbsChange[0] = tripTrajectory.heightChange < minMaxAbsChange[0] ? tripTrajectory.heightChange : minMaxAbsChange[0];
             minMaxAbsChange[1] = tripTrajectory.heightChange > minMaxAbsChange[1] ? tripTrajectory.heightChange : minMaxAbsChange[1];
             tripData.push(tripTrajectory)
+            multiColorPathData.push(multiColorTrajectory)
             if (!timestampsCreated && this.state.timestampsGeneral.length === 0) {
                 minMaxFrames[1] = timestampsGeneral.length
                 this.setState({
@@ -176,6 +188,7 @@ export default class App extends Component {
         widthScaleMinMaxChange.domain([0,Math.max.apply(null, minMaxChange.map(Math.abs))])
         colorScaleMinMaxChange.domain(minMaxChange)
         this.setState({
+            multiColorPathData,
             tripSegmentedData,
             tripData,
             animatedData,
@@ -196,6 +209,20 @@ export default class App extends Component {
 
     render() {
         let layers = [];
+        if (this.state.multiColorPathData.length > 0 && settings.visualizationType ==="multiColorPathLayer"){
+            layers.push(
+                new MultiColorPathLayer({
+                    id: 'multi-color-path-layer',
+                    data: this.state.multiColorPathData,
+                    pickable: true,
+                    widthScale: 20,
+                    widthMinPixels: 2,
+                    getPath: d => d.path,
+                    getColor: d => d.color,
+                    getWidth: d => 5
+                })
+            )
+        }
         if (this.state.tripData.length > 0) {
             if (settings.visualizationType === "lineLayer"){
                 layers.push(

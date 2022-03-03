@@ -17,6 +17,7 @@
     "@loaders.gl/mvt": "^3.0.8",
     "@loaders.gl/obj": "3.0.11",
     "@loaders.gl/shapefile": "^3.0.9",
+    "@luma.gl/constants": "^8.5.10",
     "@luma.gl/core": "8.5.5",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
