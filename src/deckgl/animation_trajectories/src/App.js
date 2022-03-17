@@ -12,13 +12,14 @@ import {BASEMAP} from '@deck.gl/carto';
 import {TripsLayer} from "@deck.gl/geo-layers";
 import {scaleLinear} from "d3-scale";
 import MultiColorPathLayer from "./MultiColorPathLayer"
+import MultiColorTripsLayer from "./MultiColorTripsLayer";
 
 // ---- GUI definition - start
 const gui = new dat.GUI();
 const settings = {
-    visualizationType: "tripsLayer"
+    visualizationType: "multiColorTripsLayer"
 }
-let guiAnimType = gui.add(settings, "visualizationType", ["multiColorPathLayer", "lineLayer", "tripsLayer", "tripsLayerSegmented"]).name("Visualization type").listen();
+let guiAnimType = gui.add(settings, "visualizationType", ["multiColorTripsLayer","multiColorPathLayer", "lineLayer", "tripsLayer"]).name("Visualization type").listen();
 // ---- GUI definition - end
 
 const INITIAL_VIEW_STATE = {
@@ -65,7 +66,6 @@ const getDate = (dateNumber) => {
 export default class App extends Component {
     state = {
         time: minMaxFrames[0],
-        tripSegmentedData: [],
         jsonData: [],
         tripData: [],
         animatedData: [],
@@ -105,7 +105,6 @@ export default class App extends Component {
         const POS_INCREMENT = 10000
         let animatedData = this.state.animatedData;
         let tripData = [];
-        let tripSegmentedData = []
         let lineData = [];
         let multiColorPathData = [];
         // for timestamps that are same for all points, timestamps can be saved only once, not associating the same array for each trip
@@ -153,18 +152,6 @@ export default class App extends Component {
                 }
             });
 
-            modifiedHeights.forEach((height, index) => {
-                if (index + 1 < modifiedHeights.length) {
-                    tripSegmentedData.push({
-                        path: [
-                            [item.geometry.coordinates[0] + index / POS_INCREMENT, item.geometry.coordinates[1] + index / POS_INCREMENT, item.properties.h_cop30m + 50000 + height * 100],
-                            [item.geometry.coordinates[0] + (index + 1) / POS_INCREMENT, item.geometry.coordinates[1] + (index + 1) / POS_INCREMENT, item.properties.h_cop30m + 50000 + modifiedHeights[index + 1] * 100],
-                        ],
-                        timestamps: [index, index + 1],
-                        colorValue: height
-                    })
-                }
-            })
 
             animatedData[index].modifiedHeights = modifiedHeights;
             animatedData[index].heightIncrement = heightIncrement;
@@ -189,7 +176,6 @@ export default class App extends Component {
         colorScaleMinMaxChange.domain(minMaxChange)
         this.setState({
             multiColorPathData,
-            tripSegmentedData,
             tripData,
             animatedData,
             lineData
@@ -260,29 +246,28 @@ export default class App extends Component {
                     }),
                 )
             }
-            else if (settings.visualizationType === "tripsLayerSegmented"){
+            else if (settings.visualizationType === "multiColorTripsLayer"){
                 layers.push(
-                    new TripsLayer({
+                    new MultiColorTripsLayer({
                         id: "trips-layer",
-                        data: this.state.tripSegmentedData,
+                        data: this.state.multiColorPathData,
                         getPath: (d) => d.path,
                         coordinateSystem: COORDINATE_SYSTEM.LNGLAT,
-                        getTimestamps: (d) => d.timestamps,
-                        getColor: (d) => colorScaleMinMaxChange(d.colorValue).rgb(),
-                        widthMinPixels: 4,
-                        fadeTrail: false,
-                        trailLength: 200,
+                        getTimestamps: (d) => this.state.timestampsGeneralIndex,
+                        getColor: d => d.color,
+                        widthMinPixels: 2,
+                        fadeTrail: true,
+                        trailLength: 100000,
                         currentTime: this.state.time,
-                    })
+                    }),
                 )
             }
-
             layers.push(
                 new PointCloudLayer({
                     id: "point-layer",
                     data: this.state.tripData,
                     coordinateSystem: COORDINATE_SYSTEM.LNGLAT,
-                    pointSize: 1,
+                    pointSize: 0.5,
                     getPosition: (d) => d.path[80],
                     getColor: [253, 5, 255],
                 })
