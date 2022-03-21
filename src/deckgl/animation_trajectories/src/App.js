@@ -138,7 +138,8 @@ export default class App extends Component {
                     modifiedHeights.push(value)
                     tripTrajectory.path.push([item.geometry.coordinates[0] + timestampIdx / 10000, item.geometry.coordinates[1] + timestampIdx / 10000, previousHeight + value])
                     // tripTrajectory.path.push([item.geometry.coordinates[0] + timestampIdx / 10000, item.geometry.coordinates[1] + timestampIdx / 10000, item.properties.h_cop30m + 50000 + value * 100])
-                    multiColorTrajectory.path.push([item.geometry.coordinates[0] + timestampIdx / 10000, item.geometry.coordinates[1] + timestampIdx / 10000, previousHeight + value])
+                    // multiColorTrajectory.path.push([item.geometry.coordinates[0] + timestampIdx / 10000, item.geometry.coordinates[1] + timestampIdx / 10000, previousHeight + value])
+                    multiColorTrajectory.path.push([item.geometry.coordinates[0], item.geometry.coordinates[1], previousHeight + value])
                     multiColorTrajectory.color.push(colorScaleMinMaxChange(value).rgb())
                     lineData.push({
                         pathIdx: index,
