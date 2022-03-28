@@ -136,9 +136,7 @@ export default class App extends Component {
                     const previousHeight = timestampIdx === 0 ? item.properties.h_cop30m + 50000 : tripTrajectory.path[timestampIdx - 1][2]
                     heightIncrement.push(timestampIdx === 0 ? 0 : value - modifiedHeights[timestampIdx - 1])
                     modifiedHeights.push(value)
-                    tripTrajectory.path.push([item.geometry.coordinates[0] + timestampIdx / 10000, item.geometry.coordinates[1] + timestampIdx / 10000, previousHeight + value])
-                    // tripTrajectory.path.push([item.geometry.coordinates[0] + timestampIdx / 10000, item.geometry.coordinates[1] + timestampIdx / 10000, item.properties.h_cop30m + 50000 + value * 100])
-                    // multiColorTrajectory.path.push([item.geometry.coordinates[0] + timestampIdx / 10000, item.geometry.coordinates[1] + timestampIdx / 10000, previousHeight + value])
+                    tripTrajectory.path.push([item.geometry.coordinates[0], item.geometry.coordinates[1], previousHeight + value])
                     multiColorTrajectory.path.push([item.geometry.coordinates[0], item.geometry.coordinates[1], previousHeight + value])
                     multiColorTrajectory.color.push(colorScaleMinMaxChange(value).rgb())
                     lineData.push({
@@ -148,7 +146,6 @@ export default class App extends Component {
                     if (!timestampsCreated) {
                         timestampsGeneral.push(parseInt(key.substring(2)))
                     }
-                    // tripTrajectory.timestamps.push(parseInt(key.substring(2)))
                     timestampIdx++
                 }
             });
@@ -167,7 +164,6 @@ export default class App extends Component {
                 this.setState({
                     timestampsGeneral: timestampsGeneral,
                     timestampsGeneralIndex: [...Array(minMaxFrames[1]).keys()],
-
                 })
                 timestampsCreated = true
             }
@@ -237,6 +233,7 @@ export default class App extends Component {
                         id: "trips-layer",
                         data: this.state.tripData,
                         getPath: (d) => d.path,
+                        billboard: true,
                         coordinateSystem: COORDINATE_SYSTEM.LNGLAT,
                         getTimestamps: (d) => this.state.timestampsGeneralIndex,
                         getColor: (d) => colorScale(d.heightChange).rgb(),
@@ -254,6 +251,7 @@ export default class App extends Component {
                         data: this.state.multiColorPathData,
                         getPath: (d) => d.path,
                         coordinateSystem: COORDINATE_SYSTEM.LNGLAT,
+                        billboard: true,
                         getTimestamps: (d) => this.state.timestampsGeneralIndex,
                         getColor: d => d.color,
                         widthMinPixels: 2,
